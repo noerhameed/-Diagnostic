@@ -1,0 +1,178 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Are You Really — A People Diagnostic</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; background: #0a0a0a; color: #ffffff; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .container { max-width: 720px; width: 100%; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .welcome-label { font-family: 'Arial', sans-serif; font-size: 11px; letter-spacing: 3px; color: #2E8B8B; text-transform: uppercase; margin-bottom: 40px; }
+    .welcome-title { font-size: clamp(28px, 5vw, 42px); font-weight: normal; line-height: 1.3; color: #ffffff; margin-bottom: 16px; }
+    .welcome-title span { color: #2E8B8B; font-style: italic; }
+    .welcome-body { font-family: 'Arial', sans-serif; font-size: 16px; line-height: 1.8; color: #aaaaaa; margin-bottom: 48px; }
+    .welcome-body p { margin-bottom: 16px; }
+    .welcome-body .highlight { color: #ffffff; font-style: italic; }
+    .btn-start { font-family: 'Arial', sans-serif; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; background: transparent; color: #2E8B8B; border: 1px solid #2E8B8B; padding: 16px 40px; cursor: pointer; transition: all 0.3s ease; }
+    .btn-start:hover { background: #2E8B8B; color: #0a0a0a; }
+    .progress-bar { width: 100%; height: 2px; background: #1a1a1a; margin-bottom: 60px; }
+    .progress-fill { height: 100%; background: #2E8B8B; transition: width 0.5s ease; }
+    .question-count { font-family: 'Arial', sans-serif; font-size: 11px; letter-spacing: 3px; color: #444444; text-transform: uppercase; margin-bottom: 40px; }
+    .question-text { font-size: clamp(20px, 3.5vw, 28px); font-weight: normal; line-height: 1.4; color: #ffffff; margin-bottom: 48px; }
+    .options { display: flex; flex-direction: column; gap: 12px; }
+    .option { font-family: 'Arial', sans-serif; font-size: 15px; line-height: 1.5; color: #888888; background: transparent; border: 1px solid #1e1e1e; padding: 18px 24px; cursor: pointer; text-align: left; transition: all 0.25s ease; display: flex; align-items: flex-start; gap: 16px; }
+    .option:hover { border-color: #2E8B8B; color: #ffffff; background: #0f1f1f; }
+    .option.selected { border-color: #2E8B8B; color: #ffffff; background: #0f1f1f; }
+    .option-letter { font-size: 11px; letter-spacing: 1px; color: #2E8B8B; min-width: 16px; margin-top: 2px; }
+    .context-options { display: flex; flex-direction: column; gap: 12px; margin-top: 48px; }
+    .context-btn { font-family: 'Arial', sans-serif; font-size: 15px; color: #888888; background: transparent; border: 1px solid #1e1e1e; padding: 18px 24px; cursor: pointer; text-align: left; transition: all 0.25s ease; }
+    .context-btn:hover { border-color: #2E8B8B; color: #ffffff; background: #0f1f1f; }
+    .result-label { font-family: 'Arial', sans-serif; font-size: 11px; letter-spacing: 3px; color: #2E8B8B; text-transform: uppercase; margin-bottom: 16px; }
+    .result-state { font-size: clamp(32px, 6vw, 52px); font-weight: normal; line-height: 1.2; color: #ffffff; margin-bottom: 40px; }
+    .result-divider { width: 40px; height: 1px; background: #2E8B8B; margin-bottom: 40px; }
+    .result-description { font-family: 'Arial', sans-serif; font-size: 16px; line-height: 1.9; color: #aaaaaa; margin-bottom: 48px; }
+    .result-action-label { font-family: 'Arial', sans-serif; font-size: 11px; letter-spacing: 3px; color: #2E8B8B; text-transform: uppercase; margin-bottom: 16px; }
+    .result-action { font-family: 'Arial', sans-serif; font-size: 15px; line-height: 1.8; color: #ffffff; border-left: 2px solid #2E8B8B; padding-left: 20px; margin-bottom: 48px; }
+    .result-footer { font-family: 'Arial', sans-serif; font-size: 13px; line-height: 1.7; color: #555555; margin-bottom: 40px; }
+    .btn-restart { font-family: 'Arial', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; background: transparent; color: #444444; border: 1px solid #222222; padding: 14px 32px; cursor: pointer; transition: all 0.3s ease; }
+    .btn-restart:hover { color: #2E8B8B; border-color: #2E8B8B; }
+    .context-result-title { font-size: clamp(24px, 4vw, 36px); font-weight: normal; line-height: 1.3; color: #ffffff; margin-bottom: 32px; }
+    .context-result-body { font-family: 'Arial', sans-serif; font-size: 16px; line-height: 1.9; color: #aaaaaa; margin-bottom: 48px; }
+    .brand { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 2px; color: #222222; text-transform: uppercase; margin-top: 60px; }
+    .fade-in { animation: fadeIn 0.5s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 480px) { body { padding: 32px 20px; align-items: flex-start; padding-top: 60px; } .option { padding: 16px 18px; font-size: 14px; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="screen active" id="screen-welcome">
+    <div class="fade-in">
+      <div class="welcome-label">A People Diagnostic</div>
+      <h1 class="welcome-title">How are you?<br><span>How are you really?</span></h1>
+      <div class="welcome-body">
+        <p>This is not a survey and there are no right or wrong answers here. This is a moment to find the right words for something you might already be feeling but have not quite been able to name yet.</p>
+        <p>Nobody sees your answers except you. This is designed entirely for you.</p>
+        <p>Take your time with each question and answer from your gut not your head.</p>
+        <p class="highlight">If you think you have nobody in your corner, we got you.</p>
+      </div>
+      <button class="btn-start" onclick="startDiagnostic()">Ready when you are</button>
+      <div class="brand">A diagnostic tool by Misbah Hameed · People Partner APAC</div>
+    </div>
+  </div>
+  <div class="screen" id="screen-question">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="question-count" id="question-count"></div>
+    <div class="question-text fade-in" id="question-text"></div>
+    <div class="options fade-in" id="options-container"></div>
+  </div>
+  <div class="screen" id="screen-context">
+    <div class="fade-in">
+      <div class="question-count">One last question</div>
+      <div class="question-text">Is there anything happening in your life outside of work right now that is making everything feel heavier?</div>
+      <div class="context-options">
+        <button class="context-btn" onclick="handleContext(false)">No. I am okay outside of work.</button>
+        <button class="context-btn" onclick="handleContext(true)">Yes. Something personal is weighing on me and it is affecting how I show up.</button>
+      </div>
+    </div>
+  </div>
+  <div class="screen" id="screen-context-result">
+    <div class="fade-in">
+      <div class="result-label">We see you</div>
+      <div class="context-result-title">Thank you for sharing that.</div>
+      <div class="result-divider"></div>
+      <div class="context-result-body">
+        <p>It takes courage to acknowledge that something is weighing on you.</p>
+        <p>Whatever you are going through outside of work — you do not have to carry it alone. This tool is not the right support for what you are experiencing right now.</p>
+        <p>Please reach out to your People Partner directly. Everything is completely confidential. Support is available and you deserve it.</p>
+      </div>
+      <button class="btn-restart" onclick="restart()">Start again</button>
+      <div class="brand">A diagnostic tool by Misbah Hameed · People Partner APAC</div>
+    </div>
+  </div>
+  <div class="screen" id="screen-result">
+    <div class="fade-in">
+      <div class="result-label" id="result-label"></div>
+      <div class="result-state" id="result-state"></div>
+      <div class="result-divider"></div>
+      <div class="result-description" id="result-description"></div>
+      <div class="result-action-label">Try this</div>
+      <div class="result-action" id="result-action"></div>
+      <div class="result-footer" id="result-footer"></div>
+      <button class="btn-restart" onclick="restart()">Start again</button>
+      <div class="brand">A diagnostic tool by Misbah Hameed · People Partner APAC</div>
+    </div>
+  </div>
+</div>
+<script>
+  const questions = [
+    { state: "Lost Their Spark", text: "When you think about going to work tomorrow — which of these feels most honest?", options: ["I genuinely look forward to it most days.", "It is fine. Nothing to complain about but nothing to get excited about either.", "I go because I have to. The spark has gone quiet.", "I dread it more than I let on.", "I have been asking myself how much longer I can keep doing this."] },
+    { state: "Lost Their Why", text: "When you think about why your work matters — to you personally, not just the organisation — which feels most true?", options: ["I know exactly why I do this and it still means something to me.", "I have a sense of it but it feels distant lately.", "I used to know. Right now I am not so sure.", "I go through the motions but the meaning has faded.", "I have stopped asking the question because I am not sure I want to know the answer."] },
+    { state: "Lost Their Footing", text: "When you think about your future here — which of these sounds most like you?", options: ["I can see a clear path and I am excited about it.", "I have a rough idea but it is not that clear yet.", "Something has shifted and I have not quite found my footing again.", "I am not sure this place is part of my future anymore.", "I have mentally already started looking for the door."] },
+    { state: "Lost Their Voice", text: "When you have something important to say at work — an opinion, an idea, a concern — what do you usually do?", options: ["I say it. I feel safe and comfortable speaking up.", "I say it sometimes but I pick my moments carefully.", "I rehearse what I want to say but often do not end up saying it.", "I have mostly stopped trying. It does not feel safe or worth it.", "I stay quiet. The anxiety of getting it wrong is too much."] },
+    { state: "Lost Their People", text: "When you think about the people at work who make it worthwhile — which feels most honest?", options: ["My people are here. I have genuine connections that make coming in worthwhile.", "I have a few good connections but they have faded a little lately.", "Someone or something changed and work feels lonelier than it used to.", "I feel quite isolated. The connections that used to be there are gone.", "Work feels like a place I go to be around people without really being with them."] },
+    { state: "Lost Their Pace", text: "When you think about the pace and challenge of your current role — which of these sounds most like you?", options: ["I am being stretched in exactly the right ways. It feels good.", "It is mostly okay. Some days more challenging than others.", "Something about the rhythm feels off. Either too much or not enough.", "I have outgrown this. I am ready for something more.", "I am either coasting when I should be growing or running myself into the ground trying to keep up."] },
+    { state: "Lost Their Balance", text: "When you think about how sustainable your work life actually is right now — which feels most true?", options: ["I feel in control. The balance is good.", "It fluctuates but mostly manageable.", "I am doing too much and I know it but I cannot seem to stop.", "I am running on empty. I just have not told anyone yet.", "I have been giving everything for so long I have forgotten what it feels like to have something left for myself."] },
+    { state: "Lost Their Trust", text: "When something goes wrong at work or a decision gets made that affects you — which of these feels most honest?", options: ["I trust that the people around me are fair and have good intentions.", "I mostly trust them but I have had moments of doubt.", "Something happened that made me question things. I have not fully recovered from it.", "Trust has been eroding for a while. I just keep showing up anyway.", "I have stopped expecting fairness. I just manage my expectations now."] }
+  ];
+  const results = {
+    "Lost Their Spark": { label: "Your state right now", description: "Your energy has been quietly fading. You are still showing up, still delivering — but something that used to feel alive has gone flat.\n\nMaybe you know this feeling. The Sunday evening dread. The stomach that churns on the commute. The moment you wake up on Monday and feel the weight of the week before it has even started.\n\nSometimes this comes from the work environment. Sometimes it comes from something bigger. Either way it deserves attention. You deserve attention.", action: "Fill in the Job Satisfaction Wheel. Rate each area of your work honestly. Which areas are draining you most? Share what you find with your manager. Start that conversation this week. You do not have to have all the answers before you start talking.", footer: "This is one of the most recoverable states — if it is caught now. You are not broken. Something needs attention." },
+    "Lost Their Why": { label: "Your state right now", description: "The deeper reason you chose this path has gone quiet. You are still doing the work but it feels like going through the motions. The connection between what you do every day and what actually matters to you has become hard to find.\n\nThis is one of the most common states — especially during periods of change or uncertainty. You are not alone in this. And it does not mean something is permanently broken. It means something needs attention.", action: "Spend 15 minutes with the Ikigai framework. Ask yourself honestly — where does what I love, what I am good at, and what this organisation needs actually intersect? Write it down. Then share it with someone you trust. You might surprise yourself.", footer: "Purpose does not disappear. It gets buried. The work is finding it again." },
+    "Lost Their Footing": { label: "Your state right now", description: "The ground beneath you feels less steady than it used to. You know what you do. You are just not sure where you stand anymore — in your role, in the team, in your future here. Something has shifted and you have not quite found your footing again.\n\nThis is not about your capability. It is about direction. And direction can be found again.", action: "Use the Wheel of Character Strengths to identify what you naturally bring. Then ask yourself honestly — how do these strengths make me valuable here? Bring that clarity into your next career conversation with your manager. Come prepared. Come with what you actually want not just what you think sounds right.", footer: "Uncertainty about the future is not the same as having no future. It just means the next step needs some attention." },
+    "Lost Their Voice": { label: "Your state right now", description: "You have gone quiet. Not because you have nothing to say — but because speaking up stopped feeling worth it. Maybe it did not feel safe. Maybe your ideas were ignored one too many times. Maybe you stopped believing your voice mattered.\n\nSometimes it shows up as anxiety. The racing thoughts before a meeting. The words you rehearse but never say. The fear of getting it wrong in front of the wrong people.\n\nWhatever form it takes — something important in you has gone silent. Your voice matters. It is worth finding again.", action: "Identify one safe moment this week to share an opinion you have been holding back. Start small. One thought. One meeting. One sentence. Build the muscle back slowly. Nobody finds their voice all at once.", footer: "Going quiet is a protection mechanism. But it costs more than it saves over time." },
+    "Lost Their People": { label: "Your state right now", description: "The people who made work feel worthwhile are no longer there in the same way. Maybe someone left. Maybe the team changed. Maybe a restructure moved everything around. Whatever happened — there is a real sense of loss underneath the loneliness.\n\nLoss at work is rarely acknowledged. But it is real. And you are allowed to feel it.\n\nSometimes this loss comes from something outside work too — something personal that has left you feeling hollow. If that is the case please know that support is available. You do not have to carry it alone.", action: "When you are ready — reach out to one person you have been meaning to connect with. A message. A coffee. Anything. You do not need to explain why. Just start. Connection does not rebuild itself but it does not take much to begin.", footer: "You are allowed to grieve what has changed. And when you are ready — connection is always possible." },
+    "Lost Their Pace": { label: "Your state right now", description: "Something about the rhythm of your work feels off. Maybe you are way beyond what your current role is asking of you — bored, coasting, ready for something more. Or maybe you are running at a pace that is burning through you — doing too much, too fast, trying to prove something.\n\nEither way the pace is not right. And your body and mind know it even if nobody around you has noticed yet.\n\nIt is okay to outgrow a role. And it is okay to say this is too much. Both are honest. Both deserve a response.", action: "Use the Assessment of Life and Career Wants worksheet to get clear on what you actually need right now. Not what you think you should want — what you actually want. Then have a direct and honest conversation with your manager. Be specific about what sustainable and stretching looks like for you.", footer: "The right pace is not the fastest or the slowest. It is the one that lets you do your best work without destroying yourself in the process." },
+    "Lost Their Balance": { label: "Your state right now", description: "You are giving more than is sustainable. The work keeps coming and you keep saying yes — because that is who you are.\n\nSometimes this comes from external pressure — too much on your plate and not enough support. Sometimes it comes from internal pressure — the part of you that cannot stop even when you should. Either way the result is the same. You are running on empty.\n\nProtecting your energy is not weakness. It is strategy. And it starts with one small decision.", action: "Name one thing you will stop doing or do less of this week. Not add. Remove. One thing. Then have an honest conversation with your manager about what sustainable looks like for you. You are allowed to ask for that.", footer: "You cannot pour from an empty cup. And right now your cup needs refilling." },
+    "Lost Their Trust": { label: "Your state right now", description: "Something happened that changed how you feel about this organisation or the people leading it. A broken promise. An unfair decision. A moment that made you question whether this place deserves your best.\n\nThis one is harder to name. And harder to fix. But it is not unfixable. It starts with one honest conversation with someone safe.", action: "Reach out to your People Partner directly. Everything is confidential. You do not have to figure this out alone and you do not have to pretend everything is fine when it is not.", footer: "Trust that is broken can be rebuilt. But it requires honesty from both sides. Starting with naming what happened." }
+  };
+  let answers = [], currentQuestion = 0;
+  function startDiagnostic() { answers = []; currentQuestion = 0; showQuestion(0); showScreen('screen-question'); }
+  function showQuestion(index) {
+    const q = questions[index];
+    const letters = ['A','B','C','D','E'];
+    document.getElementById('progress-fill').style.width = ((index/questions.length)*100)+'%';
+    document.getElementById('question-count').textContent = 'Question '+(index+1)+' of '+questions.length;
+    document.getElementById('question-text').textContent = q.text;
+    const container = document.getElementById('options-container');
+    container.innerHTML = '';
+    q.options.forEach((opt,i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.innerHTML = '<span class="option-letter">'+letters[i]+'</span><span>'+opt+'</span>';
+      btn.onclick = () => selectAnswer(i);
+      container.appendChild(btn);
+    });
+    document.getElementById('question-text').classList.remove('fade-in');
+    container.classList.remove('fade-in');
+    void document.getElementById('question-text').offsetWidth;
+    document.getElementById('question-text').classList.add('fade-in');
+    container.classList.add('fade-in');
+  }
+  function selectAnswer(optionIndex) {
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('.option')[optionIndex].classList.add('selected');
+    answers.push({ state: questions[currentQuestion].state, score: 5-optionIndex });
+    setTimeout(() => { currentQuestion++; if(currentQuestion < questions.length) { showQuestion(currentQuestion); } else { showScreen('screen-context'); } }, 350);
+  }
+  function handleContext(hasPersonalContext) { if(hasPersonalContext) { showScreen('screen-context-result'); } else { showResult(); } }
+  function showResult() {
+    let lowest = answers[0];
+    answers.forEach(a => { if(a.score < lowest.score) lowest = a; });
+    const result = results[lowest.state];
+    document.getElementById('result-label').textContent = result.label;
+    document.getElementById('result-state').textContent = lowest.state;
+    document.getElementById('result-description').innerHTML = result.description.replace(/\n\n/g,'<br><br>');
+    document.getElementById('result-action').textContent = result.action;
+    document.getElementById('result-footer').textContent = result.footer;
+    showScreen('screen-result');
+  }
+  function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); window.scrollTo(0,0); }
+  function restart() { answers = []; currentQuestion = 0; showScreen('screen-welcome'); }
+</script>
+</body>
+</html>
+
