@@ -34,8 +34,6 @@
     .result-state { font-size: clamp(28px, 5vw, 44px); font-weight: normal; line-height: 1.2; color: #ffffff; margin-bottom: 36px; }
     .result-divider { width: 32px; height: 1px; background: #2E8B8B; margin-bottom: 36px; }
     .result-description { font-family: 'Arial', sans-serif; font-size: 15px; line-height: 1.9; color: #aaaaaa; margin-bottom: 40px; }
-    .result-action-label { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 3px; color: #2E8B8B; text-transform: uppercase; margin-bottom: 14px; }
-    .result-action { font-family: 'Arial', sans-serif; font-size: 14px; line-height: 1.8; color: #ffffff; border-left: 1px solid #2E8B8B; padding-left: 18px; margin-bottom: 40px; }
     .result-footer { font-family: 'Arial', sans-serif; font-size: 12px; line-height: 1.7; color: #444444; margin-bottom: 40px; font-style: italic; }
     .btn-restart { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; background: transparent; color: #333333; border: 1px solid #1a1a1a; padding: 12px 28px; cursor: pointer; transition: all 0.3s ease; margin-bottom: 48px; }
     .btn-restart:hover { color: #2E8B8B; border-color: #2E8B8B; }
@@ -55,15 +53,14 @@
       <div class="welcome-label">People Diagnostic Tool</div>
       <h1 class="welcome-title">How are you doing at work?</h1>
       <div class="welcome-body">
-        <p>We are a people first organisation,now and always. Our people are our greatest asset.</p>
-        <p>With that belief at the heart of everything we do, we have designed this diagnostic to help you identify your current engagement state and the recommended actions to address it,whether that is a self-directed action, a conversation with your manager, or support from your People Partner.</p>
-        <p>Select the response that most accurately reflects your current experience. Your responses are confidential.</p>
-        <p>Time to complete: approximately five minutes.</p>
+        <p>This diagnostic is designed to help you identify your current engagement state at work and the recommended actions to address it.</p>
+        <p>Select the response that most accurately reflects your current experience. This is a reflective tool, not a clinical assessment. It is a structured starting point for a conversation.</p>
+        <p>Your responses are confidential. Time to complete: approximately five minutes.</p>
       </div>
       <button class="btn-start" onclick="startDiagnostic()">Begin</button>
       <div class="welcome-sign">
-        <strong>Misbah Hameed</strong><br>
-        People Partner APAC, for M+C Saatchi Performance
+        <strong>Noer Hameed</strong><br>
+        People Architect
       </div>
     </div>
   </div>
@@ -102,8 +99,6 @@
       <div class="result-state" id="result-state"></div>
       <div class="result-divider"></div>
       <div class="result-description" id="result-description"></div>
-      <div class="result-action-label">Recommended action</div>
-      <div class="result-action" id="result-action"></div>
       <div class="result-footer" id="result-footer"></div>
       <button class="btn-restart" onclick="restart()">Start again</button>
       <div class="brand">People Diagnostic Tool</div>
@@ -114,70 +109,60 @@
   const questions = [
     {
       state: "Lost Their Spark",
-      text: "When you think about going to work ,which of these feels most honest right now?",
+      text: "When you think about coming to work, which of the following feels most honest right now?",
       options: [
         "I feel energised and engaged. Work feels meaningful.",
-        "Some days are better than others. Overall I am managing.",
-        "I am going through the motions. Most days feel harder.",
-        "I am struggling. Coming in feels heavy."
+        "Some days are better than others. Overall, I am managing.",
+        "I am going through the motions. Most days feel harder than they should.",
+        "I am struggling. Showing up feels heavy."
       ]
     },
     {
       state: "Lost Their Why",
-      text: "When you think about why your work matters to you personally,which feels most true?",
+      text: "When you reflect on why your work matters to you personally, which of the following feels most true?",
       options: [
         "My work feels purposeful. I know why I do what I do.",
-        "I have a sense of purpose but it feels less clear lately.",
-        "I am going through the motions. The meaning has faded.",
+        "I have a sense of purpose, but it feels less clear than it used to.",
+        "I am going through the motions. The meaning behind my work has faded.",
         "I have lost sight of why my work matters."
       ]
     },
     {
-      state: "Lost Their Footing",
-      text: "How do you feel about your growth opportunities here?",
+      state: "Lost Their Path",
+      text: "How clear does your future feel here right now?",
       options: [
-        "I have clear opportunities to grow and develop in my role.",
-        "There are some opportunities but I am not fully utilising them.",
-        "Growth opportunities feel limited or unclear to me right now.",
-        "I do not see a path forward for myself here."
+        "Clear. I know where I am heading and what I need to do to get there.",
+        "Mostly clear, but some things feel uncertain lately.",
+        "Unclear. I am not sure what my options are or where this is going.",
+        "I do not know what my career options are here anymore."
       ]
     },
     {
       state: "Lost Their Voice",
-      text: "Are your thoughts and opinions respected at work?",
+      text: "How comfortable do you feel sharing your thoughts and opinions at work?",
       options: [
-        "Yes. I feel comfortable speaking up and my views are valued.",
-        "Sometimes. It depends on the situation or who is in the room.",
-        "Not often. I hold back because it rarely feels safe or worthwhile.",
-        "No. I have stopped sharing. It makes no difference."
+        "Very comfortable. I speak up freely and my views are genuinely valued.",
+        "Somewhat comfortable. It depends on the situation or who is in the room.",
+        "Not very comfortable. I hold back because it rarely feels safe or worthwhile.",
+        "Not comfortable at all. I have stopped sharing. It makes no difference."
       ]
     },
     {
       state: "Lost Their People",
       text: "How would you describe your working relationships right now?",
       options: [
-        "Strong. I have genuine relationships that make work worthwhile.",
-        "Okay. Some relationships have faded but I am managing.",
-        "Thin. Work feels more transactional and less connected than before.",
+        "Strong. I have genuine connections that make work worthwhile.",
+        "Manageable. Some relationships have faded but I am doing fine.",
+        "Thin. Work feels more transactional and less connected than it used to.",
         "Absent. I feel isolated from the people around me."
-      ]
-    },
-    {
-      state: "Lost Their Pace",
-      text: "Does your current role challenge you enough?",
-      options: [
-        "Yes. I am stretched in the right ways.",
-        "Sometimes. It varies but mostly feels right.",
-        "Not really. I feel under-challenged and ready for more.",
-        "No. I have outgrown this role."
       ]
     },
     {
       state: "Lost Their Balance",
       text: "How sustainable is your current workload?",
       options: [
-        "Very sustainable. I feel in control.",
-        "Mostly manageable with some pressure.",
+        "Very sustainable. I feel in control of what is on my plate.",
+        "Mostly manageable, with some pressure at times.",
         "Too much. I am consistently overwhelmed.",
         "Unsustainable. I am running on empty."
       ]
@@ -187,146 +172,141 @@
       text: "How much do you trust the decisions being made around you at work?",
       options: [
         "I trust the people and decisions around me. I feel confident in the direction we are heading.",
-        "I have some doubts but overall I still feel supported and informed.",
-        "I feel left out of decisions that affect me. Trust is wearing thin.",
+        "I have some doubts, but overall I still feel supported and informed.",
+        "I feel left out of decisions that affect me. My trust is wearing thin.",
         "I have lost confidence in the decisions being made around me."
       ]
     }
   ];
-const results = {
-"Fully Engaged": {
-label: "Your state right now",
-description: "You are in a strong place. Your energy, purpose, connections and confidence are all working for you.\n\nHigh performance is not just about results. It is about the conditions that make sustained performance possible.",
-action: "Reflect on what is working well for you right now. Share that with your manager. Strong performance understood and recognised is more likely to continue.",
-footer: "Sustained high performance requires ongoing attention to the conditions that make it possible."
-},
-"Lost Their Spark": {
-label: "Your state right now",
-description: "Your engagement at work has been declining. You are present and delivering but the energy that drives high performance is fading.\n\nThis is one of the most common and most recoverable states — if it is addressed early.",
-action: "Reflect on which areas of your work feel most draining and which still energise you. Bring that into a conversation with your manager or People Partner this week.",
-footer: "Early identification is the most effective intervention."
-},
-"Lost Their Why": {
-label: "Your state right now",
-description: "The connection between your work and what matters to you personally has become unclear. You are delivering but the purpose behind it has faded.\n\nPurpose is a key driver of sustained performance. When it is absent the impact is felt across motivation, quality of work and long term retention.",
-action: "Reflect on what drew you to this role and what still feels meaningful. Bring that into a career conversation with your manager or People Partner.",
-footer: "Purpose is not fixed. It can be rediscovered with the right conversation."
-},
-"Lost Their Footing": {
-label: "Your state right now",
-description: "Your confidence in your growth opportunities and future direction here has weakened. You are uncertain about where you are heading and what is available to you.\n\nClarity of direction is essential to sustained engagement. Without it high performers disengage quietly before they leave visibly.",
-action: "Request a career conversation with your manager or People Partner. Come prepared with your aspirations, your development needs, and what you need to see more of.",
-footer: "Clarity of direction is a leadership responsibility as much as an individual one."
-},
-"Lost Their Voice": {
-label: "Your state right now",
-description: "You are not speaking up as freely as you could or should. Whether due to safety concerns, past experience, or a sense that your contribution is not valued — something is preventing you from fully participating.\n\nPsychological safety is a fundamental condition for high performance. When it is absent the organisation loses the benefit of your thinking.",
-action: "Identify one safe opportunity this week to share a thought or perspective you have been holding back. If the environment does not feel safe — speak to your People Partner directly.",
-footer: "Psychological safety is not a soft metric. It is a performance driver."
-},
-"Lost Their People": {
-label: "Your state right now",
-description: "Your working relationships have weakened. The connections that made work worthwhile have faded or changed. Work feels more transactional and less connected than before.\n\nStrong working relationships are a key driver of engagement, productivity and retention. Their absence is felt — even when it is hard to name.",
-action: "Identify one relationship at work you want to invest in. Take one step to reconnect this week. If isolation is significantly affecting your experience at work — speak to your People Partner.",
-footer: "Connection at work is not incidental. It is foundational to sustained performance."
-},
-"Lost Their Pace": {
-label: "Your state right now",
-description: "Your current role is not challenging you at the right level. You are either ready for more than your role is offering — or the pace and demands are no longer the right fit.\n\nNeither direction is healthy long term. Both deserve a direct and honest conversation.",
-action: "Have a direct conversation with your manager about your current level of challenge and what needs to change. Be specific about what you need — more stretch, more support, or a change in scope.",
-footer: "The right level of challenge is not a luxury. It is a retention and performance strategy."
-},
-"Lost Their Balance": {
-label: "Your state right now",
-description: "Your current workload is not sustainable. You are consistently operating beyond your capacity and the impact is building.\n\nSustained overload reduces performance quality, increases error rates and accelerates burnout. This needs to be addressed now — not managed quietly.",
-action: "Have an honest conversation with your manager about your current workload. Identify specifically what needs to be reduced, redistributed or reprioritised. If the conversation feels difficult — involve your People Partner.",
-footer: "Sustainable performance requires sustainable conditions."
-},
-"Lost Their Trust": {
-label: "Your state right now",
-description: "Your confidence in the decisions being made around you has been undermined. Something has happened that has affected how safe and supported you feel here.\n\nTrust is the foundation of a high performing organisation. When it breaks down the impact is significant — on engagement, performance and retention.",
-action: "Speak to your People Partner directly. This is a confidential conversation. You do not have to manage this alone and the sooner it is addressed the better the outcome for everyone.",
-footer: "Trust is the foundation of organisational performance. It deserves direct and timely attention."
-}
-};
-let answers = [], currentQuestion = 0;
-function startDiagnostic() {
-answers = [];
-currentQuestion = 0;
-showQuestion(0);
-showScreen('screen-question');
-}
-function showQuestion(index) {
-const q = questions[index];
-const letters = ['A','B','C','D'];
-const progress = (index / questions.length) * 100;
-document.getElementById('progress-fill').style.width = progress + '%';
-document.getElementById('question-count').textContent = 'Question ' + (index + 1) + ' of ' + questions.length;
-document.getElementById('question-text').textContent = q.text;
-const container = document.getElementById('options-container');
-container.innerHTML = '';
-q.options.forEach((opt, i) => {
-const btn = document.createElement('button');
-btn.className = 'option';
-btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span><span>' + opt + '</span>';
-btn.onclick = () => selectAnswer(i);
-container.appendChild(btn);
-});
-document.getElementById('question-text').classList.remove('fade-in');
-container.classList.remove('fade-in');
-void document.getElementById('question-text').offsetWidth;
-document.getElementById('question-text').classList.add('fade-in');
-container.classList.add('fade-in');
-}
-function selectAnswer(optionIndex) {
-document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-document.querySelectorAll('.option')[optionIndex].classList.add('selected');
-const score = 4 - optionIndex;
-answers.push({ state: questions[currentQuestion].state, score: score });
-setTimeout(() => {
-currentQuestion++;
-if (currentQuestion < questions.length) {
-showQuestion(currentQuestion);
-} else {
-showScreen('screen-context');
-}
-}, 350);
-}
-function handleContext(hasPersonalContext) {
-if (hasPersonalContext) {
-showScreen('screen-context-result');
-} else {
-showResult();
-}
-}
-function showResult() {
-const lowestScore = Math.min(...answers.map(a => a.score));
-let stateName;
-if (lowestScore >= 4) {
-stateName = "Fully Engaged";
-} else {
-let lowest = answers[0];
-answers.forEach(a => { if (a.score < lowest.score) lowest = a; });
-stateName = lowest.state;
-}
-const result = results[stateName];
-document.getElementById('result-label').textContent = result.label;
-document.getElementById('result-state').textContent = stateName;
-document.getElementById('result-description').innerHTML = result.description.replace(/\n\n/g, '<br><br>');
-document.getElementById('result-action').textContent = result.action;
-document.getElementById('result-footer').textContent = result.footer;
-showScreen('screen-result');
-}
-function showScreen(id) {
-document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-window.scrollTo(0, 0);
-}
-function restart() {
-answers = [];
-currentQuestion = 0;
-showScreen('screen-welcome');
-}
+
+  const results = {
+    "Thriving": {
+      label: "Thriving",
+      description: "You are doing well. Genuinely well.\n\nThe work feels meaningful. You are the best version of yourself right now and it shows.\n\nYou are operating at your highest level. Your energy is an asset to you and the people around you.\n\nTake a moment to name what is working. Write down three things that are making work feel worthwhile right now. Keep that list somewhere you can return to.\n\nIn your next 1:1 share with your manager what keeps you engaged and explore whether you could be stretched further or take on something new.",
+      footer: ""
+    },
+    "Lost Their Spark": {
+      label: "Lost Their Spark",
+      description: "Something has shifted. You are showing up and delivering but the energy that once made work feel meaningful has quietly faded.\n\nThink about the last time work genuinely energised you. What did you have more of then that feels less present now?\n\nTry this: write down three things that used to make you look forward to work. Then write down what has changed.\n\nIf it would help to talk it through, your manager or People Partner is available to you.",
+      footer: ""
+    },
+    "Lost Their Why": {
+      label: "Lost Their Why",
+      description: "You are delivering. But somewhere along the way the reason behind it has faded. The connection between your work and what matters to you personally has become unclear.\n\nReflect on when your work last felt purposeful. Not to the business. To you. That is where this conversation needs to start.\n\nWrite down what originally drew you to this role. Then write down what still holds true and what no longer does. The gap between those two lists is worth a conversation.\n\nIf it would help to talk it through, your manager or People Partner is available to you.",
+      footer: ""
+    },
+    "Lost Their Path": {
+      label: "Lost Their Path",
+      description: "Something about the road ahead feels unclear. Not your ability. Not your effort. But the direction. Where this is going. What comes next. Whether there is still a future here worth building toward.\n\nWhen the path feels uncertain, everything else gets harder. Goals feel distant. Development stalls. The motivation to invest in what comes next quietly fades.\n\nWrite down where you hoped to be by now. Then write down what feels unclear or out of reach. The gap between those two things is worth a real conversation.\n\nIf it would help to talk it through, your manager or People Partner is available to you.",
+      footer: ""
+    },
+    "Lost Their Voice": {
+      label: "Lost Their Voice",
+      description: "Your thoughts are still there. You just are not sharing them as freely as you once did. Something, an experience, a pattern, a room that does not feel safe, has made speaking up feel less worthwhile than it should.\n\nWhen people stop speaking, the people around them lose the thinking they most need to hear.\n\nThink about the last time you held something back. What stopped you? Write it down. You do not have to share it with anyone. Just name it for yourself first.\n\nIf it would help to talk it through, your manager or People Partner is available to you.",
+      footer: ""
+    },
+    "Lost Their People": {
+      label: "Lost Their People",
+      description: "Work has started to feel more transactional than it used to. The connections that once made showing up worthwhile have thinned. You are still there but the sense of genuinely belonging with the people around you has quietly faded.\n\nThis is not weakness. Feeling connected to the people you work with is a real and legitimate need. When it is absent the impact is felt even when it is hard to name.\n\nThink about one person at work you feel genuinely connected to. If no one comes to mind easily, that is important information.\n\nIf it would help to talk it through, your manager or People Partner is available to you.",
+      footer: ""
+    },
+    "Lost Their Balance": {
+      label: "Lost Their Balance",
+      description: "The workload is not sustainable right now. You are consistently giving more than what can be maintained and the impact is building whether you can feel it yet or not.\n\nThis is not about working hard. It is about running on a level that leaves nothing in reserve. No space to think. No room to grow. No capacity to be anything other than reactive.\n\nTry this: write down what you need to start doing to protect your energy, what you need to stop taking on, and what you want to continue because it still works. Bring that list into a conversation with your manager.\n\nIf it would help to talk it through, your manager or People Partner is available to you.",
+      footer: ""
+    },
+    "Lost Their Trust": {
+      label: "Lost Their Trust",
+      description: "Something has happened. A decision that did not sit right. A promise that was not kept. A moment where the organisation showed you something that is hard to unsee.\n\nTrust does not break loudly. It erodes quietly. And once it does, everything else feels different. The same words land differently. The same actions carry a different weight.\n\nThis is the hardest state to recover from without a direct and honest conversation. Not a general one. A specific one about what happened and what needs to change.\n\nYour People Partner is available to you. This conversation is confidential.",
+      footer: ""
+    }
+  };
+
+  let answers = [], currentQuestion = 0;
+
+  function startDiagnostic() {
+    answers = [];
+    currentQuestion = 0;
+    showQuestion(0);
+    showScreen('screen-question');
+  }
+
+  function showQuestion(index) {
+    const q = questions[index];
+    const letters = ['A','B','C','D'];
+    const progress = (index / questions.length) * 100;
+    document.getElementById('progress-fill').style.width = progress + '%';
+    document.getElementById('question-count').textContent = 'Question ' + (index + 1) + ' of ' + questions.length;
+    document.getElementById('question-text').textContent = q.text;
+    const container = document.getElementById('options-container');
+    container.innerHTML = '';
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span><span>' + opt + '</span>';
+      btn.onclick = () => selectAnswer(i);
+      container.appendChild(btn);
+    });
+    document.getElementById('question-text').classList.remove('fade-in');
+    container.classList.remove('fade-in');
+    void document.getElementById('question-text').offsetWidth;
+    document.getElementById('question-text').classList.add('fade-in');
+    container.classList.add('fade-in');
+  }
+
+  function selectAnswer(optionIndex) {
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('.option')[optionIndex].classList.add('selected');
+    const score = 4 - optionIndex;
+    answers.push({ state: questions[currentQuestion].state, score: score });
+    setTimeout(() => {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion(currentQuestion);
+      } else {
+        showScreen('screen-context');
+      }
+    }, 350);
+  }
+
+  function handleContext(hasPersonalContext) {
+    if (hasPersonalContext) {
+      showScreen('screen-context-result');
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    const lowestScore = Math.min(...answers.map(a => a.score));
+    let stateName;
+    if (lowestScore >= 4) {
+      stateName = "Thriving";
+    } else {
+      let lowest = answers[0];
+      answers.forEach(a => { if (a.score < lowest.score) lowest = a; });
+      stateName = lowest.state;
+    }
+    const result = results[stateName];
+    document.getElementById('result-label').textContent = result.label;
+    document.getElementById('result-state').textContent = stateName;
+    document.getElementById('result-description').innerHTML = result.description.replace(/\n\n/g, '<br><br>');
+    document.getElementById('result-footer').textContent = result.footer;
+    showScreen('screen-result');
+  }
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function restart() {
+    answers = [];
+    currentQuestion = 0;
+    showScreen('screen-welcome');
+  }
 </script>
 </body>
 </html>
+
