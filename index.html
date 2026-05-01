@@ -29,4 +29,139 @@
     .option-letter { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 1px; color: #2E8B8B; min-width: 14px; margin-top: 3px; text-transform: uppercase; }
     .result-label { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 3px; color: #2E8B8B; text-transform: uppercase; margin-bottom: 12px; }
     .result-state { font-size: clamp(28px, 5vw, 44px); font-weight: normal; line-height: 1.2; color: #ffffff; margin-bottom: 36px; }
-    .result-divider { width: 32px; height: 1px; ba
+    .result-divider { width: 32px; height: 1px; background: #2E8B8B; margin-bottom: 36px; }
+    .result-description { font-family: 'Arial', sans-serif; font-size: 15px; line-height: 1.9; color: #aaaaaa; margin-bottom: 40px; }
+    .result-footer { font-family: 'Arial', sans-serif; font-size: 12px; line-height: 1.7; color: #444444; margin-bottom: 40px; font-style: italic; }
+    .btn-restart { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; background: transparent; color: #333333; border: 1px solid #1a1a1a; padding: 12px 28px; cursor: pointer; transition: all 0.3s ease; margin-bottom: 48px; }
+    .btn-restart:hover { color: #2E8B8B; border-color: #2E8B8B; }
+    .brand { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 2px; color: #222222; text-transform: uppercase; }
+    .fade-in { animation: fadeIn 0.4s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 480px) { body { padding: 40px 20px; align-items: flex-start; } .option { padding: 14px 18px; font-size: 13px; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="screen active" id="screen-welcome">
+    <div class="fade-in">
+      <div class="welcome-label">People Diagnostic Tool</div>
+      <h1 class="welcome-title">How are you really doing at work?</h1>
+      <div class="welcome-body">
+        <p>This diagnostic is designed to help you identify your current engagement state at work and the recommended actions to address it.</p>
+        <p>Select the response that most closely reflects your experience right now. This is a reflective tool, not a clinical assessment. It is a structured starting point for a conversation.</p>
+        <p>Any conversation you choose to have with your manager or People Partner following this is confidential.</p>
+        <p>Time to complete: approximately five minutes.</p>
+      </div>
+      <button class="btn-start" onclick="startDiagnostic()">Begin</button>
+      <div class="welcome-sign">
+        <strong>Misbah Hameed</strong><br>
+        People Behaviourist
+      </div>
+    </div>
+  </div>
+  <div class="screen" id="screen-question">
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="question-count" id="question-count"></div>
+    <div class="question-text" id="question-text"></div>
+    <div class="options" id="options-container"></div>
+  </div>
+  <div class="screen" id="screen-result">
+    <div class="fade-in">
+      <div class="result-label" id="result-label"></div>
+      <div class="result-state" id="result-state"></div>
+      <div class="result-divider"></div>
+      <div class="result-description" id="result-description"></div>
+      <div class="result-footer" id="result-footer"></div>
+      <button class="btn-restart" onclick="restart()">Start again</button>
+      <div class="brand">People Diagnostic Tool</div>
+    </div>
+  </div>
+</div>
+<script>
+  const questions = [
+    {
+      state: "Lost Their Spark",
+      text: "When you think about coming to work, which of the following feels most honest right now?",
+      options: [
+        "I feel energised and engaged. Work feels meaningful.",
+        "Some days are better than others. Overall, I am managing.",
+        "I am going through the motions. Most days feel harder than they should.",
+        "I am struggling. Showing up feels heavy."
+      ]
+    },
+    {
+      state: "Lost Their Why",
+      text: "When you reflect on why your work matters to you personally, which of the following feels most true?",
+      options: [
+        "My work feels purposeful. I know why I do what I do.",
+        "I have a sense of purpose, but it feels less clear than it used to.",
+        "I am going through the motions. The meaning behind my work has faded.",
+        "I have lost sight of why my work matters."
+      ]
+    },
+    {
+      state: "Lost Their Path",
+      text: "How clear does your future feel here right now?",
+      options: [
+        "Clear. I know where I am heading and what I need to do to get there.",
+        "Mostly clear, but some things feel uncertain lately.",
+        "Unclear. I am not sure what my options are or where this is going.",
+        "I do not know what my career options are here anymore."
+      ]
+    },
+    {
+      state: "Lost Their Voice",
+      text: "How comfortable do you feel sharing your thoughts and opinions at work?",
+      options: [
+        "Very comfortable. I speak up freely and my views are genuinely valued.",
+        "Somewhat comfortable. It depends on the situation or who is in the room.",
+        "Not very comfortable. I hold back because it rarely feels safe or worthwhile.",
+        "Not comfortable at all. I have stopped sharing. It makes no difference."
+      ]
+    },
+    {
+      state: "Lost Their People",
+      text: "How would you describe your working relationships right now?",
+      options: [
+        "Strong. I have genuine connections that make work worthwhile.",
+        "Manageable. Some relationships have faded but I am doing fine.",
+        "Thin. Work feels more transactional and less connected than it used to.",
+        "Absent. I feel isolated from the people around me."
+      ]
+    },
+    {
+      state: "Lost Their Balance",
+      text: "How sustainable is your current workload?",
+      options: [
+        "Very sustainable. I feel in control of what is on my plate.",
+        "Mostly manageable, with some pressure at times.",
+        "Too much. I am consistently overwhelmed.",
+        "Unsustainable. I am running on empty."
+      ]
+    },
+    {
+      state: "Lost Their Trust",
+      text: "How much do you trust the decisions being made around you at work?",
+      options: [
+        "I trust the people and decisions around me. I feel confident in the direction we are heading.",
+        "I have some doubts, but overall I still feel supported and informed.",
+        "I feel left out of decisions that affect me. My trust is wearing thin.",
+        "I have lost confidence in the decisions being made around me."
+      ]
+    }
+  ];
+
+  const results = {
+    "Thriving": {
+      label: "Thriving",
+      description: "You are doing well. Genuinely well.\n\nThe work feels meaningful. You are the best version of yourself right now and it shows.\n\nYou are operating at your highest level. Your energy is an asset to you and the people around you.\n\nTake a moment to name what is working. Write down three things that are making work feel worthwhile right now. Keep that list somewhere you can return to.\n\nIn your next 1:1 share with your manager what keeps you engaged and explore whether you could be stretched further or take on something new.",
+      footer: ""
+    },
+    "Lost Their Spark": {
+      label: "Lost Their Spark",
+      description: "Something has shifted. You are showing up and delivering but the energy that once made work feel meaningful has quietly faded.\n\nThink about the last time work genuinely energised you. What did you have more of then that feels less present now?\n\nTry this: write down three things that used to make you look forward to work. Then write down what has changed.\n\nIf it would help to talk it through, your manager or People Partner is available to you.",
+      footer: ""
+    },
+    "Lost Their Why": {
+      label: "Lost Their Why",
+      description: "You are delivering. But somewhere along the way the reason behind it has faded. The connection between your work and what matters to you personally has become unclear.\n\nReflect on when your work last felt purposeful. Not to the business. To you. That is where this conversation needs to start.\n\nWrite down what originally drew you to this role. Then
