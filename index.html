@@ -29,47 +29,4 @@
     .option-letter { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 1px; color: #2E8B8B; min-width: 14px; margin-top: 3px; text-transform: uppercase; }
     .result-label { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 3px; color: #2E8B8B; text-transform: uppercase; margin-bottom: 12px; }
     .result-state { font-size: clamp(28px, 5vw, 44px); font-weight: normal; line-height: 1.2; color: #ffffff; margin-bottom: 36px; }
-    .result-divider { width: 32px; height: 1px; background: #2E8B8B; margin-bottom: 36px; }
-    .result-description { font-family: 'Arial', sans-serif; font-size: 15px; line-height: 1.9; color: #aaaaaa; margin-bottom: 40px; }
-    .result-footer { font-family: 'Arial', sans-serif; font-size: 12px; line-height: 1.7; color: #444444; margin-bottom: 40px; font-style: italic; }
-    .btn-restart { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; background: transparent; color: #333333; border: 1px solid #1a1a1a; padding: 12px 28px; cursor: pointer; transition: all 0.3s ease; margin-bottom: 48px; }
-    .btn-restart:hover { color: #2E8B8B; border-color: #2E8B8B; }
-    .brand { font-family: 'Arial', sans-serif; font-size: 10px; letter-spacing: 2px; color: #222222; text-transform: uppercase; }
-    .fade-in { animation: fadeIn 0.4s ease forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    @media (max-width: 480px) { body { padding: 40px 20px; align-items: flex-start; } .option { padding: 14px 18px; font-size: 13px; } }
-  </style>
-</head>
-<body>
-<div class="container">
-  <div class="screen active" id="screen-welcome">
-    <div class="fade-in">
-      <div class="welcome-label">People Diagnostic Tool</div>
-      <h1 class="welcome-title">How are you really doing at work?</h1>
-      <div class="welcome-body">
-        <p>This diagnostic is designed to help you identify your current engagement state at work and the recommended actions to address it.</p>
-        <p>Select the response that most closely reflects your experience right now. This is a reflective tool, not a clinical assessment. It is a structured starting point for a conversation.</p>
-        <p>Any conversation you choose to have with your manager or People Partner following this is confidential.</p>
-        <p>Time to complete: approximately five minutes.</p>
-      </div>
-      <button class="btn-start" onclick="startDiagnostic()">Begin</button>
-      <div class="welcome-sign">
-        <strong>Misbah Hameed</strong><br>
-        People Behaviourist
-      </div>
-    </div>
-  </div>
-  <div class="screen" id="screen-question">
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-    <div class="question-count" id="question-count"></div>
-    <div class="question-text" id="question-text"></div>
-    <div class="options" id="options-container"></div>
-  </div>
-  <div class="screen" id="screen-result">
-    <div class="fade-in">
-      <div class="result-label" id="result-label"></div>
-      <div class="result-state" id="result-state"></div>
-      <div class="result-divider"></div>
-      <div class="result-description" id="result-description"></div>
-      <div class="result-footer" id="result-footer"></div>
-      <button
+    .result-divider { width: 32px; height: 1px; ba
